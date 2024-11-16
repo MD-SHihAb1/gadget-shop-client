@@ -1,5 +1,5 @@
 import { GrLogout, GrOverview } from "react-icons/gr";
-import { IoIosAddCircle, IoMdAddCircle } from "react-icons/io";
+import { IoIosAddCircle, } from "react-icons/io";
 import { IoHome } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 import useUserData from "../../../Hooks/useUserData";
@@ -9,7 +9,7 @@ import useAuth from "../../../Hooks/useAuth";
 const sellerRoutes = [
   {
     id: 1,
-    route: "/dashboard/my-products",
+    route: "/dashboard/myProduct",
     title: "My Products",
     icon: <MdOutlineInventory2 className="text-xl" />,
   },

@@ -7,7 +7,9 @@ const SellerRoutes = ({children}) => {
     const {user, loading} = useAuth();
     const userData = useUserData();
     const location = useLocation();
-    if(loading){
+
+
+    if(loading || !userData.role){
         return <Loader></Loader>
     } 
     if(user && userData.role === "seller"){
