@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import useAuth from "../../../Hooks/useAuth";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const AddProducts = () => {
 
@@ -21,10 +22,10 @@ const AddProducts = () => {
         const sellerEmail = user.email;
         const stock = parseInt(data.stock);
         const brand = data.brand;
-        const image = data.image;
+        const image = data.imageURL;
 
         const product = {
-            title,price,description,category,sellerEmail,stock,brand, image
+            title,price,description,category,sellerEmail,stock,brand, image,
         };
         const token = localStorage.getItem("access-token");
         axios.post("http://localhost:5000/add-products", product, {
@@ -32,7 +33,17 @@ const AddProducts = () => {
                 authorization: `Bearer ${token}`,
             },
         })
-        .then(res=>console.log(res))
+        .then((res)=> {
+            if(res.data.insertedId){
+                Swal.fire({
+                    position: "top-center",
+                    icon: "success",
+                    title: "Product Added Successfully",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }
+        });
 
     };
 
