@@ -1,4 +1,6 @@
 import { useForm } from "react-hook-form";
+import useAuth from "../../../Hooks/useAuth";
+import axios from "axios";
 
 const AddProducts = () => {
 
@@ -8,10 +10,30 @@ const AddProducts = () => {
       handleSubmit,
       formState: { errors },
     } = useForm();
+    const {user} = useAuth();
     
   
     const onSubmit = (data) => {
-        console.log(data);
+        const title = data.title;
+        const price = parseFloat(data.price);
+        const description = data.description;
+        const category = data.category;
+        const sellerEmail = user.email;
+        const stock = parseInt(data.stock);
+        const brand = data.brand;
+        const image = data.image;
+
+        const product = {
+            title,price,description,category,sellerEmail,stock,brand, image
+        };
+        const token = localStorage.getItem("access-token");
+        axios.post("http://localhost:5000/add-products", product, {
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+        })
+        .then(res=>console.log(res))
+
     };
 
 
@@ -58,7 +80,7 @@ const AddProducts = () => {
                   <span className="label-text">price</span>
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Product price"
                   className="w-full p-2 border border-black rounded-md"
                   required
@@ -73,7 +95,7 @@ const AddProducts = () => {
                   <span className="label-text">Stock</span>
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Product stock"
                   className="w-full p-2 border border-black rounded-md"
                   required
@@ -83,13 +105,44 @@ const AddProducts = () => {
                   <span className="text-red-500">This field is required</span>
                 )}
               </div>
+              <div className="w-full">
+                <label className="label">
+                  <span className="label-text">Category</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Product Category"
+                  className="w-full p-2 border border-black rounded-md"
+                  required
+                  {...register("category", { require: true })}
+                />
+                {errors.category && (
+                  <span className="text-red-500">This field is required</span>
+                )}
+              </div>
+            
               
               </div>
               <div className="w-full">
                 <label className="label">
-                  <span className="label-text">description</span>
+                  <span className="label-text">Image URL</span>
                 </label>
                 <input
+                  type="text"
+                  placeholder="Product image"
+                  className="w-full p-2 border border-black rounded-md"
+                  required
+                  {...register("imageURL", { require: true })}
+                />
+                {errors.imageURL && (
+                  <span className="text-red-500">This field is required</span>
+                )}
+              </div>
+              <div className="w-full">
+                <label className="label">
+                  <span className="label-text">Description</span>
+                </label>
+                <textarea
                   type="text"
                   placeholder="Product description"
                   className="w-full p-2 border border-black rounded-md"
@@ -103,7 +156,7 @@ const AddProducts = () => {
 
               <div className="form-control mt-6">
                 <button type="submit" className="btn btn-primary">
-                  Register
+                  Add Product
                 </button>
               </div>
             </form>
